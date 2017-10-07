@@ -19,8 +19,26 @@ class App extends Component {
         this.props.actionCreatorAddReminder(this.state.text);
     }
 
+    displayReminders(){
+        const { reminders } = this.props;
+ 
+        return(
+            <div>
+                <ul>
+                    {reminders.map(reminder=>{
+                        return(
+                            <li key={reminder.id}>
+                                {reminder.text}
+                            </li>
+                        );
+                    })}
+                </ul>               
+
+            </div>
+        );
+    }
+
     render(){
-        console.log("props in render method: ", this.props);
         return( 
             <div className="app container">
                 <div className="row">
@@ -42,11 +60,15 @@ class App extends Component {
                                     onChange={event=>this.setState({text:event.target.value})} 
                                 />
                                 <div className="input-group-btn"> {/*this ensures proper alignment of button */}
-                                    <button className="btn btn-secondary" type="button" onClick={()=>this.addReminder()}>Add!</button> {/*2*/}
+                                    <button className="btn btn-secondary" type="button" onClick={()=>this.addReminder()}>Add!</button> 
                                 </div>
                             </div>
                     </div>
                 </div>
+
+            
+                {this.displayReminders()}
+                
 
             </div>
         );
@@ -58,8 +80,6 @@ function mapDispatchToProps(dispatch){
    // binde action creator to this application, import above bindActionCreator from redux
     return bindActionCreators({actionCreatorAddReminder}, dispatch);
 } 
-
-
 
 function mapStateToProps(state){
     return {
