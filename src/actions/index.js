@@ -2,7 +2,7 @@
 // action creator is a function which returns an object/action
 // befor creating action creator we set constatns file
 
-import {ADD_REMINDER, REMOVE_REMINDER} from '../constans.js';
+import {ADD_REMINDER, REMOVE_REMINDER, REMOVE_ALL} from '../constans.js';
 
 export const actionCreatorAddReminder = (text, dueDate) => {
     // acrion /object:
@@ -20,6 +20,13 @@ export const actionCreatorRemoveReminder = (id) =>{
         id
     }
     console.log("deleting action: ", action);
+    return action;
+}
+
+export const actionCreatorRemoveAll = ()=>{
+    const action = {
+        type: REMOVE_ALL
+    }
     return action;
 }
 

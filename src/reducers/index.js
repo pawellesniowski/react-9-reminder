@@ -1,7 +1,6 @@
 // creating reducers:
 
-import {ADD_REMINDER} from '../constans.js';
-import {REMOVE_REMINDER} from '../constans.js';
+import {ADD_REMINDER, REMOVE_REMINDER, REMOVE_ALL} from '../constans.js';
 
 import { bake_cookie, read_cookie } from 'sfcookies'
 
@@ -33,6 +32,10 @@ const reminders = (state=[], action)=>{
             return reminders;
         case REMOVE_REMINDER:
             reminders = removeById(state, action);
+            bake_cookie('reminders', reminders);
+            return reminders;
+        case REMOVE_ALL:
+            reminders = [];
             bake_cookie('reminders', reminders);
             return reminders;
         default: 
