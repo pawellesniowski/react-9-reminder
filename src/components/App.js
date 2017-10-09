@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreatorAddReminder, actionCreatorRemoveReminder } from '../actions';
 
+import  moment from 'moment';
 
 import '../styles/css.css';
 
@@ -15,34 +16,44 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            text: ''
+            text: '',
+            dueDate: ''
         }
+
     }
 
     addReminder(){
+        console.log(this.state);
         if(this.state.text !== ''){
-            this.props.actionCreatorAddReminder(this.state.text); // 'activating' actions...
+            this.props.actionCreatorAddReminder(this.state.text, this.state.dueDate); // 'activating' actions...
             this.setState({
-                text: ''
+                text: '',
+                dueDate: ''
             });
         }
     }
 
-    displayRminders(){
+    displayReminders(){
         const { reminders } = this.props;
         return(
             <ul>
                 {reminders.map(reminder=>{
                     return (
                         <li className="list_item" key={reminder.id}>
+                                
                             <h3>
                                 <i  
                                     onClick={()=>this.deleteReminder(reminder.id)}
                                     className="close-x fa fa-times" aria-hidden="true">
-                                </i>
-                                {reminder.text} 
-                                
+                                </i> 
+                                {reminder.text}
                             </h3>
+                            <p>
+                                <em>
+                                    {moment(new Date(reminder.dueDate)).format('LL')}, ({moment(new Date(reminder.dueDate)).fromNow()})
+                                </em>
+                            </p>                            
+
                         </li>
                     );
                 })}
@@ -73,6 +84,13 @@ class App extends Component {
                                 aria-label="New reminder..." 
                             />
 
+                            <input 
+                                className="form-control"
+                                type="datetime-local"
+                                onChange={event=>this.setState({dueDate: event.target.value})}
+                                value={this.state.dueDate}
+                            />
+                            
                             <span className="input-group-btn">
                                 <button 
                                     onClick={()=>{this.addReminder()}}
@@ -88,7 +106,7 @@ class App extends Component {
                 </div> {/*end of input - button row*/}
 
                 <div className="app-output">
-                    {this.displayRminders()}
+                    {this.displayReminders()}
                 </div>
               
 

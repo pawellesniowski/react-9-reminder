@@ -4,11 +4,12 @@
 
 import {ADD_REMINDER, REMOVE_REMINDER} from '../constans.js';
 
-export const actionCreatorAddReminder = (text) => {
+export const actionCreatorAddReminder = (text, dueDate) => {
     // acrion /object:
     const action = {
         type: ADD_REMINDER,
-        text
+        text,
+        dueDate
     }
     return action;
 }

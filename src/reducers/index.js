@@ -3,14 +3,14 @@
 import {ADD_REMINDER} from '../constans.js';
 import {REMOVE_REMINDER} from '../constans.js';
 
-//reducer takes STATE , change it and returns NEW STATE OBJECT
-// reducers specify how the state was changed
-
+import { bake_cookie, read_cookie } from 'sfcookies'
 
 const reminder = (action)=>{
+    const { text, dueDate } = action;
     let reminder = {
-        text: action.text,
-        id: Math.random()
+        text,
+        dueDate,
+        id: new Date().getTime()
     }
     return reminder;
 }
@@ -24,13 +24,16 @@ const removeById = (state=[], action)=>{
 
 const reminders = (state=[], action)=>{
     let reminders = null;
+    state = read_cookie('reminders');
 
     switch(action.type){
         case ADD_REMINDER:
             reminders = [...state, reminder(action)];
+            bake_cookie('reminders', reminders);
             return reminders;
         case REMOVE_REMINDER:
             reminders = removeById(state, action);
+            bake_cookie('reminders', reminders);
             return reminders;
         default: 
             return state;
