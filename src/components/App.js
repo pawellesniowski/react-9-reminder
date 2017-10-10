@@ -22,9 +22,35 @@ class App extends Component {
 
     }
 
+    prettyDate(num){
+        return num>9? num : "0"+num;
+    }
+
+    theDate(para){
+        const date = new Date();
+        switch(para){
+            case "y":
+            return date.getFullYear();
+            case "m":
+            return this.prettyDate(date.getMonth()+1);
+            case "d":
+            return this.prettyDate(date.getDate());
+
+            default:
+            console.log("theDate method - failt, wrong paramiter");
+        }
+    }
+
     addReminder(){
-        if(this.state.text !== ''){
+        if(this.state.text !== '' && this.state.dueDate !== ''){
             this.props.actionCreatorAddReminder(this.state.text, this.state.dueDate); // 'activating' actions...
+            this.setState({
+                text: '',
+                dueDate: ''
+            });
+        } else if (this.state.text !== ''){
+            let defaultValue= `${this.theDate("y")}-${this.theDate("m")}-${this.theDate("d")}T23:59`;
+            this.props.actionCreatorAddReminder(this.state.text, defaultValue);
             this.setState({
                 text: '',
                 dueDate: ''
@@ -61,13 +87,14 @@ class App extends Component {
     }
 
     deleteReminder(id){
-        console.log(id);
         this.props.actionCreatorRemoveReminder(id);
     }
 
     removeAll(){
         this.props.actionCreatorRemoveAll();
     }
+
+
 
     render(){
         return(
@@ -88,10 +115,9 @@ class App extends Component {
                                 <input 
                                     className="form-control"
                                     type="datetime-local"
-                                    onChange={event=>this.setState({dueDate: event.target.value})}
-                                    value={this.state.dueDate}
-                                />
-                                
+                                    onChange={(event)=>this.setState({dueDate: event.target.value})}
+                                    defaultValue={`${this.theDate("y")}-${this.theDate("m")}-${this.theDate("d")}T23:59`}
+                                />                                
                                 
                                 <button 
                                     onClick={()=>{this.addReminder()}}
@@ -114,7 +140,7 @@ class App extends Component {
                         onClick={()=>this.removeAll()}
                         className="btn btn-danger">Remove All</button>
                 </div>
-              
+            
 
             </div>
         );
